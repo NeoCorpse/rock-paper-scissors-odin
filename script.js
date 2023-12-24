@@ -1,17 +1,9 @@
 "use strict";
 
-let playerChoice;
-let status;
-let rounds = 0;
-let x;
-let wins = 0;
-let loss = 0;
-let gameResult;
+const allowed = ['rock', 'paper', 'scissors']
 
-// Function (getComputerChoice) -> Get a random choice from the computer between rock,paper, and scissors. 
-    // get random number from 1 to 3 then use switch to assign rock, paper or scissors
 function getComputerChoice() {
-    let random = Math.ceil(Math.random() * 3 );
+    const random = Math.ceil(Math.random() * 3 );
     let choice;
     switch(random) {
         case 1 :
@@ -30,70 +22,45 @@ function getComputerChoice() {
     return choice
 }
 
-// Function -> Play a single round of rock, paper, scissors. params(playerSelection, computerSelection). 
-    //Returns a string that declares the winner
-    //playerSelection should be case sensitive
-    // If there is a tie, replay the round
-
 function playRound(playerSelection, computerSelection) {
     let result;
-    let repeat = true;
-    let count = 0;
-    let tie = false;
-    rounds++;
-
-    do {
-        tie = false
-        repeat = false;
-        if (!(playerSelection.includes('rock') || playerSelection.includes('paper') || playerSelection.includes('scissors'))) {
-            playerSelection = prompt('Please choose the allowed values only (rock, paper or scissors)')
-            playerSelection = playerSelection.toLowerCase()
-        }
-        if (tie === true) {
-            playerSelection = prompt('Pick between rock, paper and scissors.')
-            playerSelection = playerSelection.toLowerCase()
-        }
-        repeat = false;
-        if (playerSelection === computerSelection) {
-            result = 'It\'s a tie.'
-            tie = true;
-        } else if (playerSelection == 'rock') {
-            result = computerSelection == 'scissors' ? 'You win! :) Rock beats scissors.' : 'You lose :( Paper beats rock!';
-        } else if (playerSelection == 'paper') {
-            result = computerSelection == 'rock' ? 'You win! :) Paper beats rock.' : 'You lose :( Scissors beats paper';
-        } else if (playerSelection =='scissors') {
-            result = computerSelection == 'paper' ? 'You win! :) Scissors beats paper.' : 'You lose :( Rock beats scissors'
-        } else {
-            repeat = true;
-            count++;
-        }
-
-        (tie === true) ? rounds-- : rounds = rounds;
-
-        return result;  
-    } while (repeat == true && rounds < 6 || tie == true)
-    
+    switch(playerSelection) {
+        case 'rock':
+            result = computerSelection == 'rock' ? 'It\'s a tie!' :
+            computerSelection == 'paper'? 'You lose! Paper beats rock!' : 'You win! Rock beats scissors!'
+            break;
+        case 'paper':
+            result = computerSelection == 'rock' ? 'You win! Paper beats rock' :
+            computerSelection == 'paper' ? 'It\'s a tie!' : 'You lose! Scissors beats paper'
+            break;
+        case 'scissors':
+            result = computerSelection == 'rock'? 'You lose! Rock beats scissors' :
+            computerSelection == 'paper' ? 'You win! Scissors beats paper': 'It\'s a tie'
+            break;
+    }
+    return result;
 }
 
-// Function(game) -> Use the previous function inside of this one to play a best-of-five game that keeps score and reports a winner or loser at the end.
-    //use loops to play five times
-    // This function uses other functions in it's code
 function game() {
-    let count = 1;
+    let choice;
+    let wins = 0, losses = 0, ties = 0;
+    let rounds = 0;
+    let x;
     while (rounds < 5) {
-        console.log(`Round ${count}`);
-        playerChoice = prompt('Pick between rock, paper and scissors.')
-        playerChoice = playerChoice.toLowerCase();
-        console.log(x = playRound(playerChoice, getComputerChoice()))
-        count++;
+        choice = prompt('Choose between rock, paper and scissors.').toLowerCase()
+        while (!(allowed.includes(choice))) {
+            choice = prompt(`Please select only the allowed values, that is: ${allowed}`).toLowerCase();
+        }
+        console.log(x = playRound(choice, getComputerChoice()))
         if (x.includes('win')) {
             wins++;
-        } else if (x.includes('lose')) {loss++};
+            rounds++;
+        } else if(x.includes('lose')) {
+            losses++;
+            rounds++;
+        } else if (x.includes('tie')) {
+            ties++;
+        }
     }
-
-    (wins > loss) ? console.log(`You won with ${wins} wins and ${loss} losses.`) : console.log(`You lost with ${wins} wins and ${loss} losses.`);
+    (wins > losses) ? console.log(`Yaaay!! You won with ${wins} wins, ${losses} losses and ${ties} ties.`) : console.log(`Bummer! You lost with ${wins} wins, ${losses} losses and ${ties} ties.`)
 }
-
-game();
-// console.log()
-// console.log(getComputerChoice())
