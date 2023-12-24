@@ -1,13 +1,11 @@
 "use strict";
 
-const rock = document.querySelector('#rock')
-const paper = document.querySelector('#paper')
-const scissors = document.querySelector('#scissors')
 const allowed = ['rock', 'paper', 'scissors']
-const button = document.querySelectorAll('button')
+const button = document.querySelectorAll('.button')
 const status = document.querySelector('.status')
 const lastRound = document.querySelector('.last')
 const theEnd = document.querySelector('.container');
+const resetBtn = document.querySelector('#reset')
 let wins = 0, losses = 0, ties = 0, rounds = 0;
 let x;
 
@@ -29,8 +27,6 @@ const round = (e)=> {
         endGame('lose')
     }
 
-    console.log(x)
-
     lastRound.textContent = x
     status.textContent = `Wins: ${wins}  Losses: ${losses}  Ties: ${ties}`
 }
@@ -38,6 +34,19 @@ const round = (e)=> {
 
 button.forEach((value) => {
     value.addEventListener('click', round)
+})
+
+resetBtn.addEventListener('click', () => {
+    wins = 0
+    losses = 0
+    rounds= 0
+    ties = 0
+    lastRound.textContent = ''
+    status.textContent = ''
+    theEnd.textContent = ''
+    button.forEach((value) => {
+        value.addEventListener('click', round)
+    })
 })
 
 function getComputerChoice() {
@@ -81,7 +90,7 @@ function playRound(playerSelection, computerSelection) {
 
 function endGame(result) {
     if (result == 'win') {
-        theEnd.textContent += `Yaay! You won with ${wins} points.`
+        theEnd.textContent += `Yay! You won with ${wins} points.`
     } else if (result == 'lose') {
         theEnd.textContent += `Bummer! You lost with ${losses} points.`
     }
@@ -90,47 +99,3 @@ function endGame(result) {
         value.removeEventListener('click', round)
     })
 }
-
-// button.addEventListener('click', (e)=> {
-//     x = playRound(e.target.textContent.toLowerCase(),getComputerChoice());
-//     if (x.includes('win')) {
-//         wins++;
-//         rounds++;
-//     } else if(x.includes('lose')) {
-//         losses++;
-//         rounds++;
-//     } else if (x.includes('tie')) {
-//         ties++;
-//     }
-
-//     if (wins == 5) {
-//         endGame('win');
-//     } else if (losses == 5) {
-//         endGame('lose')
-//     }
-// }
-// )
-
-// function game() {
-//     let choice;
-//     let wins = 0, losses = 0, ties = 0;
-//     let rounds = 0;
-//     let x;
-//     while (rounds < 5) {
-//         choice = prompt('Choose between rock, paper and scissors.').toLowerCase()
-//         while (!(allowed.includes(choice))) {
-//             choice = prompt(`Please select only the allowed values, that is: ${allowed}`).toLowerCase();
-//         }
-//         console.log(x = playRound(choice, getComputerChoice()))
-//         if (x.includes('win')) {
-//             wins++;
-//             rounds++;
-//         } else if(x.includes('lose')) {
-//             losses++;
-//             rounds++;
-//         } else if (x.includes('tie')) {
-//             ties++;
-//         }
-//     }
-//     (wins > losses) ? console.log(`Yaaay!! You won with ${wins} wins, ${losses} losses and ${ties} ties.`) : console.log(`Bummer! You lost with ${wins} wins, ${losses} losses and ${ties} ties.`)
-// }
